@@ -5,6 +5,8 @@ import xmltodict
 import os
 import cv2
 import time
+from bson import json_util
+import json
 
 client = MongoClient('mongodb+srv://unknown:unknown@student.gb0wa.mongodb.net/baggage?retryWrites=true&w=majority')
 db = client['baggage']
@@ -17,8 +19,14 @@ CORS(app)
 def index():
     dbdata = collection.find_one({})
     print(dbdata)
-    return jsonify({"message": "Hello python flask"})
+    documents = collection.find()
+    response = []
+    for document in documents:
+        document['_id'] = str(document['_id'])
+        response.append(document)
+    return json.dumps(response)
 
+   
 @app.route('/output/<path:path>')
 def send_js(path):
     return send_from_directory('output', path)
