@@ -6,7 +6,7 @@
 3. run: pip install -r requirements.txt
 4. run: python backend.py
 ```
-## Database
+## Database(NOSQL WHY?)
 
  ```
 1. BaggageAI backend project runs on flask framework along with mongoDB noSQL Database 
