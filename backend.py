@@ -5,7 +5,6 @@ import xmltodict
 import os
 import cv2
 import time
-from bson import json_util
 import json
 
 client = MongoClient('mongodb+srv://unknown:unknown@student.gb0wa.mongodb.net/baggage?retryWrites=true&w=majority')
@@ -17,16 +16,19 @@ CORS(app)
 
 @app.route("/", methods=['GET'])
 def index():
-    dbdata = collection.find_one({})
-    print(dbdata)
-    documents = collection.find()
+    return jsonify({ "message": "Hello Python Flask" })
+
+@app.route("/generateCSV", methods=['POST'])
+def generateCSV():
+    x = request.get_json()
+    # return jsonify({ "data": x })
+    dbdata = collection.find({ "timestamp": { "$gte": x['startDate'], "$lt": x['endDate'] } })
     response = []
-    for document in documents:
+    for document in dbdata:
         document['_id'] = str(document['_id'])
         response.append(document)
     return json.dumps(response)
 
-   
 @app.route('/output/<path:path>')
 def send_js(path):
     return send_from_directory('output', path)
